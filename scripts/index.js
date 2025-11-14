@@ -1,4 +1,6 @@
 import Curso from "./clases/Curso.js";
+import Docente from "./clases/Docente.js";
+import Alumno from "./clases/Alumno.js";
 
 /*const jspoo = new Curso("POO Javascript","https://edteam-media.s3.amazonaws.com/specialities/medium/9aeb8331-58e3-4ca1-a6df-999f96fa24b8.jpeg",10)
 const python = new Curso("Python","https://edteam-media.s3.amazonaws.com/specialities/medium/0a1542ab-ecb2-4e05-a4b5-eddf5778bf57.jpeg",12)
@@ -46,6 +48,28 @@ myformulario.addEventListener("submit",e=>{
     crearCursos(myCurso)
 })
 
+//OJOOOOOOOOO podriamos usar "this" ya que es igual a "e.target", podriamos escribir this.nombreCurso 
+// para acceder al input.
+
+//OJOOOOOOOOO con respecto a "e => {} dentro de addEventListener debemos tener en cuenta lo siguiente:::"
+//----Se usa arrow functions (e => {}) en addEventListenner 
+//Cuando necesitas acceder a this del ámbito superior, por ejemplo, para acceder a variables o métodos 
+// de la clase que contiene el listener. También cuando el callback no necesita tener su propio this dinámico. 
+
+//-----Se usa funciones regulares (function(){}) en addEvntListener
+//Cuando necesitas que this dentro del callback se refiera al elemento HTML que disparó el evento.
+
+//En este caso seria mejor usar una funcion regular, pero es solo un ejemplo.
+
+const alumno1 = new Alumno("john","pol","pol@gmail.com",true,["html","css"])
+const alumno2 = new Alumno("john","pol","pol@gmail.com",true,["php","js"])
+
+const html = new Curso("html","poster.jpg",10)
+//El spread operator "..." me permite obtener los valores de un arreglo 
+html.setInscritos([...html.getInscritos(),alumno1])
+html.setInscritos([...html.getInscritos(),alumno2])
+
+console.log(html.getInscritos())
 
 /*crearCursos(jspoo)
 crearCursos(python)*/
