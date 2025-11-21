@@ -70,6 +70,7 @@ html.setInscritos([...html.getInscritos(),alumno1])
 html.setInscritos([...html.getInscritos(),alumno2])
 
 console.log(html.getInscritos())
+console.log(alumno1.nom1)
 
 /*crearCursos(jspoo)
 crearCursos(python)*/
