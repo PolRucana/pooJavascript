@@ -12,6 +12,8 @@ const python = new Curso("Python","https://edteam-media.s3.amazonaws.com/special
 
 const elemento = document.getElementById("curso")
 const listaCursos=[]
+const listaAlumnos = new Array()
+const listaDocentes = Array() 
 
 function crearCursos(curso) {
     // ! Creamos un elemento en el DOM
@@ -142,14 +144,20 @@ const contTablaAlum = document.getElementById("tablaAlumnos")
 // * const objAlumno = new Alumno("JOhn","Rucana","pol@gmail.com",true,"html")
 
 // ! Con esta función obtenemos los cursos seleccionados guardandolos en un array
-function obtenerOptionAl() {
-    const captionOption = Array.from(updateCursosAl.selectedOptions).map(opcion=>opcion.textContent).join(" * ")
+/*function obtenerOptionAl() {
+    const captionOption = Array.from(updateCursosAl.selectedOptions).map(opcion=>opcion.textContent)
     console.log(captionOption)
     return captionOption
-}
+}*/
 formAlumno.addEventListener("submit",function(e){
     e.preventDefault()
-    const objAlumno = new Alumno(this.nombreAlum.value,this.apellidoAlum.value,this.correoAlum.value,this.activoAlum.value,obtenerOptionAl())
+    const captionOption = Array.from(updateCursosAl.selectedOptions).map(opcion=>listaCursos.find(tomarcurso=>tomarcurso.getNombre()===opcion.textContent))
+    
+    const objAlumno = new Alumno(this.nombreAlum.value,this.apellidoAlum.value,this.correoAlum.value,this.activoAlum.value,captionOption)
+
+    listaAlumnos.push(objAlumno)
+
+    const nomCurso= objAlumno.getCursosTomados().map(nomc=>nomc.getNombre()).join(" * ")
 
     const filaAlumno = document.createElement("tr")
     const nomAlum = document.createElement("td")
@@ -162,7 +170,7 @@ formAlumno.addEventListener("submit",function(e){
     apeAlum.textContent = objAlumno.getApellido()
     corAlum.textContent = objAlumno.getCorreo()
     actAlum.textContent = objAlumno.getActivo()
-    curAlum.textContent = objAlumno.getCursosTomados()
+    curAlum.textContent = nomCurso
 
     filaAlumno.appendChild(nomAlum)
     filaAlumno.appendChild(apeAlum)
@@ -171,6 +179,19 @@ formAlumno.addEventListener("submit",function(e){
     filaAlumno.appendChild(curAlum)
 
     contTablaAlum.appendChild(filaAlumno)
+    
+
+    captionOption.forEach(addCurso=>{
+        addCurso.setInscritos([...addCurso.getInscritos(),objAlumno])
+    })
+    /*obtenerOptionAl().forEach(c=>{
+        const cursoEncontrado = listaCursos.find(objc=>objc.getNombre()===c)
+        cursoEncontrado.setInscritos([...cursoEncontrado.getInscritos(),objAlumno])
+    })
+    console.log(listaCursos)*/
+    console.log(objAlumno)
+    console.log(listaCursos)
+
     formAlumno.reset()
 })
 
@@ -182,6 +203,7 @@ formAlumno.addEventListener("submit",function(e){
 const formDocentes = document.getElementById("formDocentes")
 const tablaDocente = document.getElementById("tablaDocentes")
 
+// ! Con esta función obtenemos los cursos seleccionados guardandolos en un array
 const obtenerOptionDoc = ()=>{
     const captionOption = Array.from(updateCursosDoc.selectedOptions).map(opcion=>opcion.textContent).join(" * ")
     return captionOption
