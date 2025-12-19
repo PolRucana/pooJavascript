@@ -32,7 +32,11 @@ function crearCursos(curso) {
             </h3>
             <div class="s-main-center">
                 <span>Cantidad de clases: ${curso.getNroClases()}</span>
-            </div>
+            </div><br>
+            <h3 class="t5 s-mb-2 s-center">Alumnos Inscritos:</h3>
+            <div id="inscritoAl-${curso.getNombre()}"></div>
+            <h3 class="t5 s-mb-2 s-center">Docente a cargo:</h3>
+            <div id="docente-${curso.getNombre()}"></div>
         </div>
         
     `
@@ -127,10 +131,10 @@ const alumno2 = new Alumno("john","pol","pol@gmail.com",true,["php","js"])
 
 const html = new Curso("html","poster.jpg",10)
 // ! El spread operator "..." me permite obtener los valores de un arreglo 
-html.setInscritos([...html.getInscritos(),alumno1])
-html.setInscritos([...html.getInscritos(),alumno2])
+html.setInscritosAl([...html.getInscritosAl(),alumno1])
+html.setInscritosAl([...html.getInscritosAl(),alumno2])
 
-console.log(html.getInscritos())
+console.log(html.getInscritosAl())
 console.log(alumno1.nom1)
 
 
@@ -182,13 +186,19 @@ formAlumno.addEventListener("submit",function(e){
     
 
     captionOption.forEach(addCurso=>{
-        addCurso.setInscritos([...addCurso.getInscritos(),objAlumno])
+        addCurso.setInscritosAl([...addCurso.getInscritosAl(),objAlumno])
+        const mostrarAlCur = document.getElementById(`inscritoAl-${addCurso.getNombre()}`)
+        mostrarAlCur.innerHTML=`
+            <p>${objAlumno.getNombre()} ${objAlumno.getApellido()}<p>
+        `
     })
     /*obtenerOptionAl().forEach(c=>{
         const cursoEncontrado = listaCursos.find(objc=>objc.getNombre()===c)
         cursoEncontrado.setInscritos([...cursoEncontrado.getInscritos(),objAlumno])
     })
     console.log(listaCursos)*/
+
+
     console.log(objAlumno)
     console.log(listaCursos)
 
@@ -204,31 +214,34 @@ const formDocentes = document.getElementById("formDocentes")
 const tablaDocente = document.getElementById("tablaDocentes")
 
 // ! Con esta función obtenemos los cursos seleccionados guardandolos en un array
-const obtenerOptionDoc = ()=>{
-    const captionOption = Array.from(updateCursosDoc.selectedOptions).map(opcion=>opcion.textContent).join(" * ")
-    return captionOption
-}
-
-const crearAlumno = (objDocente) =>{
-    tablaDocente.innerHTML=`
-        <tr>
-            <td>${objDocente.getNombre()}</td>
-            <td>${objDocente.getApellido()}</td>
-            <td>${objDocente.getCorreo()}</td>
-            <td>${objDocente.getActivo()}</td>
-            <td>${objDocente.getCursosDictados()}</td>
-            <td>${objDocente.getCalificacion()}</td>
-        </tr>
-    `
-}
 
 formDocentes.addEventListener("submit",(e)=>{
     e.preventDefault()
+    const captionOption = Array.from(updateCursosDoc.selectedOptions).map(opcion=>listaCursos.find(tomarcurso=>tomarcurso.getNombre()===opcion.textContent));
     const estrDoc = e.target
-    const objetoDocente = new Docente(estrDoc.nombreDoc.value,estrDoc.apellidoDoc.value,estrDoc.correoDoc.value,estrDoc.activoDoc.value,obtenerOptionDoc(),estrDoc.califiDoc.value)
-    crearAlumno(objetoDocente)
+    const objetoDocente = new Docente(estrDoc.nombreDoc.value,estrDoc.apellidoDoc.value,estrDoc.correoDoc.value,estrDoc.activoDoc.value,captionOption,estrDoc.califiDoc.value)
+    listaDocentes.push(objetoDocente)
+    const nomcurso = objetoDocente.getCursosDictados().map(nomc=>nomc.getNombre()).join(" * ")
+    
+    tablaDocente.innerHTML=`
+        <tr>
+            <td>${objetoDocente.getNombre()}</td>
+            <td>${objetoDocente.getApellido()}</td>
+            <td>${objetoDocente.getCorreo()}</td>
+            <td>${objetoDocente.getActivo()}</td>
+            <td>${nomcurso}</td>
+            <td>${objetoDocente.getCalificacion()}</td>
+        </tr>
+    `
+    captionOption.forEach(objcurso =>{
+        objcurso.setInscritosDoc([...objcurso.getInscritosDoc(),objetoDocente])
+        const capturarCursoDoc = document.getElementById(`docente-${objcurso.getNombre()}`)
+        capturarCursoDoc.innerHTML=`
+            <p>${objetoDocente.getNombre()} ${objetoDocente.getApellido()}</p>
+        `
+    })
+    
 })
-
 
 
 // ? ..........................................................
