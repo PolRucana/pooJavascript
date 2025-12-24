@@ -3,7 +3,8 @@ export default class Curso {
         this.nombre=nombre,
         this.poster=poster,
         this.nroClases=nroClases,
-        this.inscritos= new Array()
+        this.inscritosAl= new Array()
+        this.inscritosDoc= new Array()
     }
 
     getNombre(){
@@ -15,8 +16,11 @@ export default class Curso {
     getNroClases(){
         return this.nroClases
     }
-    getInscritos(){
-        return this.inscritos
+    getInscritosAl(){
+        return this.inscritosAl
+    }
+    getInscritosDoc(){
+        return this.inscritosDoc
     }
 
     setNombre(nombre){
@@ -28,7 +32,10 @@ export default class Curso {
     setNroClases(nroClases){
         this.nroClases = nroClases
     }
-    setInscritos(inscritos){
-        this.inscritos = inscritos
+    setInscritosAl(inscritosAl){
+        this.inscritosAl = inscritosAl
+    }
+    setInscritosDoc(inscritosDoc){
+        this.inscritosDoc = inscritosDoc
     }
 }
